@@ -9,7 +9,7 @@ module.exports = {
       });
     },
     post: function (options, callback) {
-      db.query("INSERT INTO messages (message) VALUES(?)", options, (err, results) => {
+      db.query("INSERT INTO messages (message, roomname) VALUES(?, ?)", options, (err, results) => {
         if (err){
           console.log(err);
         } else {
@@ -22,7 +22,11 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {},
+    get: function (callback) {
+      db.query('SELECT * FROM users', (err, results)=> {
+        callback(null, results);
+      });
+    },
     post: function (options, callback) {
       db.query("INSERT INTO users (username) VALUES(?)", options, (err, results) => {
         if (err){

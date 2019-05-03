@@ -3,26 +3,23 @@ CREATE DATABASE chat;
 
 USE chat;
 
-CREATE TABLE `users` (
-  `id` int AUTO_INCREMENT,
-  `username` VARCHAR(255),
-  PRIMARY KEY (`id`)
+CREATE TABLE users (
+  id INTEGER AUTO_INCREMENT,
+  username VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
 );
 
-CREATE TABLE `messages` (
-  `id` int AUTO_INCREMENT,
-  `message` VARCHAR(255),
-  `username` VARCHAR(255),
-  `roomname` VARCHAR(255),
-  PRIMARY KEY (`id`)
+CREATE TABLE messages (
+  id INTEGER AUTO_INCREMENT,
+  message VARCHAR(255) NOT NULL,
+  user_id int default null,
+  roomname VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(user_id) 
+    REFERENCES users (id) on delete cascade
 );
 
-CREATE TABLE `rooms` (
-  `id` int AUTO_INCREMENT,
-  `roomname` VARCHAR(255),
-  `messages` VARCHAR(255),
-  PRIMARY KEY (`id`)
-);
+
 
 /* Create other tables and define schemas for them here! */
 

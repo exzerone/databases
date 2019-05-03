@@ -14,7 +14,9 @@ module.exports = {
     post: function (req, res) {
       // let sql = `INSERT INTO messages (message) VALUES('im happy')`;
       // let options = [req.body.message, req.body.username, req.body.roomname];
-      let options = [req.body.message];
+      console.log('this is body message ', req.body.message)
+      console.log('this is body roomname ', req.body.roomname)
+      let options = [req.body.message, req.body.roomname];
       // console.log('this is the message: ', req.body.message);
       models.messages.post(options,(err, results) => {
         if (err) {
@@ -31,7 +33,15 @@ module.exports = {
 
   users: {
     // Ditto as above
-    get: function (req, res) {},
+    get: function (req, res) {
+      models.users.get((error, results)=> {
+        if (error){
+          throw error;
+        } 
+        res.writeHead(200);
+        res.end(JSON.stringify(results));
+      });
+    },
     post: function (req, res) {
       // let sql = `INSERT INTO users (username) VALUES('Valjean')`;
       // console.log(req);
