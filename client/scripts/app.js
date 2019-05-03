@@ -4,35 +4,42 @@ var App = {
 
   username: 'anonymous',
 
-  initialize: function() {
-    App.username = window.location.search.substr(10);
+initialize: function() {
+  App.username = window.location.search.substr(10);
 
-    FormView.initialize();
-    RoomsView.initialize();
-    MessagesView.initialize();
+  FormView.initialize();
+  RoomsView.initialize();
+  MessagesView.initialize();
 
-    // Fetch initial batch of messages
-    App.startSpinner();
-    App.fetch(App.stopSpinner);
+  // Fetch initial batch of messages
+  App.startSpinner();
+  App.fetch(App.stopSpinner);
 
+
+  // Poll for new messages every 3 sec
+  setInterval(App.fetch, 3000);
   },
 
-  fetch: function(callback = ()=>{}) {
-    Parse.readAll((data) => {
-      // examine the response from the server request:
-      console.log(data);
+fetch: function(callback = ()=>{}) {
+  Parse.readAll((data) => {
 
-      callback();
-    });
-  },
+    // Don't bother to update if we have no messages
+    if (!data.results || !data.results.length) { return; }
 
-  startSpinner: function() {
-    App.$spinner.show();
-    FormView.setStatus(true);
-  },
+    Rooms.update(data.results, RoomsView.render);
+    Messages.update(data.results, MessagesView.render);
+    
+    callback();
+  });
+},
 
-  stopSpinner: function() {
-    App.$spinner.fadeOut('fast');
-    FormView.setStatus(false);
-  }
+startSpinner: function() {
+  App.$spinner.show();
+  FormView.setStatus(true);
+},
+
+stopSpinner: function() {
+  App.$spinner.fadeOut('fast');
+  FormView.setStatus(false);
+}
 };
